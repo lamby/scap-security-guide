@@ -60,15 +60,26 @@ def output_checkfile(target, path_info):
                 "./bash/file_permissions{0}.sh", path_id
             )
 
-    elif target == "ansible" and not re.match( r'\^.*\$', file_name, 0):
-        file_from_template(
-            "./template_ANSIBLE_permissions",
-            {
-                "FILEPATH":      full_path,
-                "FILEMODE":      mode,
-            },
-            "./ansible/file_permissions{0}.yml", path_id
-        )
+    elif target == "ansible":
+        if not re.match( r'\^.*\$', file_name, 0):
+            file_from_template(
+                "./template_ANSIBLE_permissions",
+                {
+                    "FILEPATH":      full_path,
+                    "FILEMODE":      mode,
+                },
+                "./ansible/file_permissions{0}.yml", path_id
+            )
+        else:
+            file_from_template(
+                "./template_ANSIBLE_regex_permissions",
+                {
+                    "FILEPATH":      dir_path,
+                    "FILEMODE":      mode,
+                    "FILENAME":      file_name,
+                },
+                "./ansible/file_permissions{0}.yml", path_id
+            )
 
     elif target == "oval":
         # build the state that describes our mode

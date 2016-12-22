@@ -1,0 +1,18 @@
+# platform = Red Hat Enterprise Linux 6, Red Hat Enterprise Linux 7, multi_platform_fedora, Debian 8
+# reboot = false
+# strategy = configure
+# complexity = low
+# disruption = low
+- name: Get back all files matching FILENAME
+  find:
+    paths: "FILEPATH"
+    patterns: "FILENAME"
+    use_regex: True
+  register: "{{matched_files}}"
+
+- name: Ensure permission FILEMODE on all files matching FILENAME
+  file:
+    path="{{item}}"
+    mode=FILEMODE
+  with_items:
+    - {{matched_files}}
